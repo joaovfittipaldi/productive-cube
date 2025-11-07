@@ -1,5 +1,6 @@
 import json
 import threading
+from app import database_manager
 import paho.mqtt.client as mqtt
 
 def start_worker(broker, topic):
@@ -12,8 +13,8 @@ def on_message(client, userdata, message):
     global my_temp
     mensagem = message.payload.decode("utf-8")
     payload = payload_format(mensagem_pre_formatacao=mensagem)
-
-    print("received message: " , payload.get("AcX"))
+    AcX, AcY, AcZ = payload.get("AcX"), payload.get("AcY"), payload.get("AcZ")
+    database_manager.querry(AcX, AcY, AcZ)
 
 def payload_format(mensagem_pre_formatacao) -> dict:
     payload_dict = {}

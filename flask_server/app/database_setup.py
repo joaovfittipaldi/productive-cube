@@ -10,6 +10,15 @@ def setup_connection(user, password, database):
     cur = db.cursor()
     cur.execute("CREATE DATABASE IF NOT EXISTS teste")
     cur.close()
+    return get_connection()
+
+def get_connection():
+    db = mysql.connector.connect(
+        host='localhost',
+        user= os.getenv('USER'),
+        password= os.getenv('PASSWORD'),
+        database='teste'
+    )
     return db
 
 def run_schema(db):
@@ -27,5 +36,3 @@ def run_schema(db):
 
     db.commit()
     cursor.close()
-    db.close()
-    
