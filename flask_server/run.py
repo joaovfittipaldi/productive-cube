@@ -7,7 +7,7 @@ secret_key, user, password, broker = environment.load_ambient_variables()
 data = {"user": user, "password": password}
 
 app = create_app(secret_key=secret_key, data=data, database="teste")
-
+# Saved
 if __name__ == "__main__":
-    worker.start_worker(broker=broker, topic="pipoca doce")
-    app.run(debug=True)
+    worker.start_worker(broker=broker, topic="focuscube/status")
+    app.run()

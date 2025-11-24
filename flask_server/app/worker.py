@@ -1,7 +1,10 @@
 import json
 import threading
-from app import database_manager
+from app import timer
+from datetime import datetime
 import paho.mqtt.client as mqtt
+
+temporizador = None  # criado APENAS AQUI
 
 def start_worker(broker, topic):
     client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
@@ -10,26 +13,44 @@ def start_worker(broker, topic):
     t1.start()
 
 def on_message(client, userdata, message):
-    global my_temp
+    global temporizador
+        
     mensagem = message.payload.decode("utf-8")
-    payload = payload_format(mensagem_pre_formatacao=mensagem)
-    AcX, AcY, AcZ = payload.get("AcX"), payload.get("AcY"), payload.get("AcZ")
-    database_manager.querry(AcX, AcY, AcZ)
+    payload = payload_format(mensagem=mensagem)
 
-def payload_format(mensagem_pre_formatacao) -> dict:
-    payload_dict = {}
-    caracteres_remover = ['"', '}', '{']
-    novo_texto = ''.join(ch for ch in mensagem_pre_formatacao if ch not in caracteres_remover)
-    values = novo_texto.split(",")
-    for i in range(len(values)-1):
-        key, value = values[i].split(":")
-        payload_dict.update({key: value})
+    if payload.get('modo') == "5":
+        return
 
-    return payload_dict
+    if temporizador is not None and temporizador.is_alive():
+        timer.stop_event.set()       
+        temporizador.join() 
+
+    if temporizador is None or not temporizador.is_alive():
+        horario = datetime.now().strftime("%H:%M:%S")
+        dia_semana = datetime.now().strftime("%A")
+        temporizador = threading.Thread(
+        target=timer.timer, 
+        args=(payload.get('modo'), 0, horario, dia_semana,))
+        temporizador.daemon = True
+
+        temporizador.start()
+
+def payload_format(mensagem: str) -> dict:
+    mensagem = mensagem.strip()
+    if mensagem.lower() == "interrupção":
+        return {"interrupcao": True}
+    if mensagem.lower().startswith("modo:"):
+        try:
+            valor = int(mensagem.split(":")[1].strip())
+            return {"modo": valor}
+        except ValueError:
+            return {"erro": "Valor numérico inválido para Modo"}
+
+    return {"erro": "Formato de mensagem desconhecido"}
+
 
 def worker(client, mqttBroker, topic: str):
-    print("Conectado!")
-    client.connect(mqttBroker)
-    client.subscribe(topic)
-    client.on_message=on_message
-    client.loop_forever()
+        client.connect(mqttBroker)
+        client.subscribe(topic)
+        client.on_message = on_message
+        client.loop_forever()

@@ -1,5 +1,8 @@
 from flask import Flask
 from app import database_setup
+from app.views import bp
+
+global app
 
 def create_app(secret_key, data, database):
     user = data.get('user')
@@ -10,6 +13,7 @@ def create_app(secret_key, data, database):
 
     app = Flask(__name__)
     app.config['SECRET_KEY'] = secret_key
-
+    app.register_blueprint(bp)
+    app.db = db
 
     return app
