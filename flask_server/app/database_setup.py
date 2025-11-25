@@ -8,7 +8,7 @@ def setup_connection(user, password, database):
         password= password,
     )
     cur = db.cursor()
-    cur.execute("CREATE DATABASE IF NOT EXISTS teste")
+    cur.execute(f"CREATE DATABASE IF NOT EXISTS focus_cube")
     cur.close()
     return get_connection()
 
@@ -17,13 +17,13 @@ def get_connection():
         host='localhost',
         user= os.getenv('USER'),
         password= os.getenv('PASSWORD'),
-        database='teste'
+        database='focus_cube'
     )
     return db
 
 def run_schema(db):
     cursor = db.cursor()
-    cursor.execute("USE teste")
+    cursor.execute("USE focus_cube")
 
     schema_path = os.path.join(os.path.dirname(__file__), "..", "schema.sql")
     with open(schema_path, "r", encoding="utf-8") as f:
