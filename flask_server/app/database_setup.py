@@ -36,3 +36,19 @@ def run_schema(db):
 
     db.commit()
     cursor.close()
+
+def populate_db(db):
+    cursor = db.cursor()
+    cursor.execute("USE focus_cube")
+
+    schema_path = os.path.join(os.path.dirname(__file__), "..", "populate.sql")
+    with open(schema_path, "r", encoding="utf-8") as f:
+        sql_script = f.read()
+
+    for statement in sql_script.split(";"):
+        stmt = statement.strip()
+        if stmt:
+            cursor.execute(stmt + ";")
+
+    db.commit()
+    cursor.close()

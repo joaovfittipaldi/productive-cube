@@ -108,12 +108,12 @@ def total_mes():
         "meta_mensal": total["tempo_meta"]
     }
 
-def inserir_tempo(Tempo_modo, Tempo_restante, Horario_dia, Dia_da_semana):
+def inserir_tempo(Tempo_modo, Tempo_restante, Horario_dia, Dia_da_semana, Data_atual):
     con = database_setup.get_connection()
     cur = con.cursor()
 
-    sql_querry = "INSERT INTO temporizador (Tempo_modo, Tempo_restante, Horario_dia, Data_atual, Dia_da_semana) values (%s, %s, %s, %s, %s)"
-    params = Tempo_modo, Tempo_restante, Horario_dia, Dia_da_semana
+    sql_querry = "INSERT INTO temporizador (Tempo_modo_Segundos, Tempo_restante_Segundos, Data_atual, Horario_dia, Dia_da_semana) values (%s, %s, %s, %s, %s)"
+    params = Tempo_modo, Tempo_restante , Data_atual , Horario_dia, Dia_da_semana
 
     cur.execute(sql_querry, params)
     con.commit()

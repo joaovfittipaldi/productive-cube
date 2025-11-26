@@ -8,17 +8,30 @@ bp = Blueprint("endpoints", __name__)
 
 @bp.route("/sessoes_sem_fim")
 def teste_view():
+    # Retorno {"sessoes_nao_completas": X}
     return database_manager.update_tempo_nao_terminou()
 
 @bp.route("/dia")
 def meta_diaria():
+    # Retorno: {"total_diario": X}
+
     meta_diaria = database_manager.total_dia()
     return meta_diaria
 
 @bp.route("/semana")
 def meta_semanal():
+    # Retorno: {
+    # "meta_semanal": X
+    # "tempo_total_semana": Y
+    #  }
+
     return database_manager.total_semana()
 
 @bp.route("/mes")
 def meta_mensal():
+    # Retorno: {
+    # "meta_mensal": X
+    # "tempo_total_mes": Y
+    #  }
+
     return database_manager.total_mes()

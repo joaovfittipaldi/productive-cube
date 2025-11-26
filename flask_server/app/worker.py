@@ -27,11 +27,11 @@ def on_message(client, userdata, message):
 
     if temporizador is None or not temporizador.is_alive():
         horario = datetime.now().strftime("%H:%M:%S")
-        data_atual = datetime.now().strftime("%d/%m/%Y")
+        data_atual = datetime.now().strftime("%Y-%m-%d")
         dia_semana = datetime.now().strftime("%A")
         temporizador = threading.Thread(
         target=timer.timer, 
-        args=(payload.get('modo'), 0, horario, data_atual, dia_semana,))
+        args=(payload.get('modo'), horario, dia_semana, data_atual ))
         temporizador.daemon = True
 
         temporizador.start()
