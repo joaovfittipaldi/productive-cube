@@ -34,4 +34,8 @@ def meta_mensal():
     # "tempo_total_mes": Y
     #  }
 
-    return database_manager.total_mes()
+    return database_manager.meta_mensal()
+
+@bp.route("/dashboard")
+def dashboard_semanal():
+    return database_manager.desempenho_semanal()

@@ -46,8 +46,18 @@ def total_semana():
 
     cur = con.cursor(dictionary=True, buffered=True)
 
-    menor = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
-    maior = datetime.now().strftime("%Y-%m-%d")
+    for i in range(-7, 0):
+        atual = datetime.now() + timedelta(days=i)
+        if atual.weekday() == 0:
+            dia_certo = atual
+            break
+
+    inicio_mes = datetime.now()
+    menor = datetime(inicio_mes.year, inicio_mes.month, dia_certo.day)
+    maior = (menor + timedelta(days=7))
+
+    menor = menor.strftime("%Y-%m-%d")
+    maior = maior.strftime("%Y-%m-%d")
 
     sql_query = """
         SELECT 
@@ -75,12 +85,12 @@ def total_semana():
     }
 
 
-def total_mes():
+def meta_mensal():
     con = database_setup.get_connection()
 
     cur = con.cursor(dictionary=True, buffered=True)
-
-    menor = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
+    inicio_mes = datetime.now()
+    menor = datetime(inicio_mes.year, inicio_mes.month, 1)
     maior = datetime.now().strftime("%Y-%m-%d")
 
     sql_query = """
@@ -107,6 +117,36 @@ def total_mes():
         "tempo_total_mes": atual["tempo_total"],
         "meta_mensal": total["tempo_meta"]
     }
+
+def desempenho_semanal():
+    con = database_setup.get_connection()
+
+    cur = con.cursor(dictionary=True, buffered=True)
+
+    for i in range(-7, 0):
+        atual = datetime.now() + timedelta(days=i)
+        if atual.weekday() == 0:
+            dia_certo = atual
+            break
+    
+    inicio_mes = datetime.now()
+    menor = datetime(inicio_mes.year, inicio_mes.month, dia_certo.day)
+    maior = (menor + timedelta(days=7))
+
+    menor = menor.strftime("%Y-%m-%d")
+    maior = maior.strftime("%Y-%m-%d")
+
+    sql_query = """
+        SELECT Dia_da_Semana as dia, SUM(Tempo_Modo_Segundos) - SUM(Tempo_Restante_Segundos) as tempo 
+        FROM temporizador 
+        WHERE DATE(Data_atual) >= %s and Date(Data_atual) <= %s 
+        GROUP BY Dia_da_Semana
+    """
+    cur.execute(sql_query, (menor, maior))
+    atual = cur.fetchall()
+    cur.close()
+
+    return atual
 
 def inserir_tempo(Tempo_modo, Tempo_restante, Horario_dia, Dia_da_semana, Data_atual):
     con = database_setup.get_connection()
