@@ -6,10 +6,10 @@ bp = Blueprint("endpoints", __name__)
 
 # Definindo endpoints
 
-@bp.route("/sessoes_sem_fim")
+@bp.route("/sessoes_completas")
 def teste_view():
     # Retorno {"sessoes_nao_completas": X}
-    return database_manager.update_tempo_nao_terminou()
+    return database_manager.tempo_terminou()
 
 @bp.route("/dia")
 def meta_diaria():

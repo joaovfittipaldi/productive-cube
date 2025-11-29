@@ -18,11 +18,14 @@ def on_message(client, userdata, message):
     mensagem = message.payload.decode("utf-8")
     payload = payload_format(mensagem=mensagem)
 
-    if payload.get('modo') == "5":
+    print(f"Mensagem: {mensagem} \n Payload: {payload}")
+
+    if payload.get('interrupcao'):
+        timer.stop_event.set()
         return
 
     if temporizador is not None and temporizador.is_alive():
-        timer.stop_event.set()       
+        timer.stop_event.set() 
         temporizador.join() 
 
     if temporizador is None or not temporizador.is_alive():
@@ -37,16 +40,18 @@ def on_message(client, userdata, message):
         temporizador.start()
 
 def payload_format(mensagem: str) -> dict:
-    mensagem = mensagem.strip()
-    if mensagem.lower() == "interrupção":
+    if mensagem.lower() == "parado":
         return {"interrupcao": True}
-    if mensagem.lower().startswith("modo:"):
+
+    mensagem = mensagem.lower()
+    mensagem = mensagem.strip()
+
+    if mensagem.startswith("foco:"):
         try:
             valor = int(mensagem.split(":")[1].strip())
             return {"modo": valor}
         except ValueError:
             return {"erro": "Valor numérico inválido para Modo"}
-
     return {"erro": "Formato de mensagem desconhecido"}
 
 

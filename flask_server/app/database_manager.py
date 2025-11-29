@@ -8,14 +8,14 @@ import os
 # Tempo de foco/dia
 
 
-def update_tempo_nao_terminou():
+def tempo_terminou():
     con = database_setup.get_connection()
     cur = con.cursor(dictionary=True)
 
     sql_query = """
-        SELECT COUNT(Tempo_Restante_Segundos) as sessoes_nao_completas
+        SELECT COUNT(Tempo_Restante_Segundos) as sessoes_completas
         FROM temporizador
-        WHERE Tempo_Restante_Segundos > 0
+        WHERE Tempo_Restante_Segundos = 0
     """
 
     cur.execute(sql_query, )
