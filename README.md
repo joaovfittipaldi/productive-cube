@@ -1,15 +1,15 @@
-# Productive Cube
+# Focus Cube
 
 Um sistema de gerenciamento de produtividade e tempo, desenvolvido com Flask e integrado com MQTT para comunicação em tempo real com dispositivos embarcados.
 
 ## Descrição do Projeto
 
-O Productive Cube é uma aplicação que monitora e gerencia sessões de produtividade, permitindo rastrear o tempo gasto em atividades e analisar métricas de desempenho diário, semanal e mensal. O sistema utiliza um servidor Flask para fornecer APIs REST e se integra com um broker MQTT para comunicação com dispositivos IoT.
+O Focus Cube é uma aplicação que monitora e gerencia sessões de produtividade, permitindo rastrear o tempo gasto em atividades e analisar métricas de desempenho diário, semanal e mensal. O sistema utiliza um servidor Flask para fornecer APIs REST e se integra com um broker MQTT para comunicação com dispositivos IoT.
 
 ## Estrutura do Projeto
 
 ```
-productive-cube/
+focus-cube/
 ├── README.md                    # Este arquivo
 ├── start_project.bat            # Script para iniciar o projeto
 └── flask_server/                # Servidor Flask
@@ -39,8 +39,8 @@ productive-cube/
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/joaovfittipaldi/productive-cube.git
-cd productive-cube
+git clone https://github.com/joaovfittipaldi/focus-cube.git
+cd focus-cube
 ```
 
 2. Instale as dependências:
@@ -153,9 +153,9 @@ Este projeto é parte de um trabalho acadêmico de sistemas embarcados.
 
 ## Autores
 
-- João Vitor Fittipaldi
 - André Luiz Goes Costa da Fonseca
-- Lizandra Vieira
 - Gabriel Caetano Farias
+- João Vitor Fittipaldi
+- Lizandra Vieira
 ---
 
